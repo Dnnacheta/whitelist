@@ -1,1 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <title>🌴 Merkle Tree 🌴</title>
+    <script src="https://cdn.jsdelivr.net/npm/merkletreejs@latest/merkletree.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/keccak256@latest/keccak256.js"></script>
+</head>
+    <body>
+    </body>
+    <script type"text/javascript">
+    const addresses = ["0xCcb60d99152850c9Aed1dA299F7D0A8872a3e6cD", "0xD81F6314A4D8854BD3178EF12F720EEb29e85D26",
+    "0x13fa52591d5357551698714677daf2e29b6Bf935", "0x3f4FD2C010690ecF0cC872B53264eE28C7Ba3Bd6",
+    "0x1B0B5FcdD0944aF9672bdfe5E0644c1842cb7A67", "0x00697bc02aA9e83EB727fdD98676019946A9a86e",
+    "0x363e84521EC6E4b62896DFE006779Ab016997797", "0x7EFc8eFE949c4690bD58c9FB8BEc669674908567",
+    "0x7f457E95891945f4252A26489EFe941221D49DAB", "0x1Dd3534FF3851036557a0b092CCC97981B330C18",
+    "0xcF365c2B7b8a50Cc1dfeaDC4FA0C4Eaec4c83ba6", "0xed8813DFa70C0c69C9993843745f0ABD6305Ab2f",
+    "0xb26Dd521BD38a3Dfc7f6B042C4D5a16cb62F5865", "0x463A5fFfB82E2E9366a1494671450974DEE2850E",
+    "0x6Afc45D55335c94f4192155686Fba4d0e4dD37dd"]
+    const leaves = addresses.map(x => keccak256(x));
+    const tree = new MerkleTree(leaves, keccak256, { sortPairs: true })
+    const buf2hex = x => "0x" + x.toString("hex");
+    // const root = tree.getRoot().toString('hex')
+    // const leaf = keccak256('a')
+    // const proof = tree.getProof(leaf)
+    // console.log(tree.verify(proof, leaf, root))
+    const root = buf2hex(tree.getRoot());
+    console.log(root); // 0x8890fdaaf3cdfcde0537857464fe9faac18a6d185dc1992ca2f2b809057def57
+    const proof = tree.getProof(buf2hex(keccak256(addresses[14])));
+    console.log(proof);
+    const proofData = tree.getProof(buf2hex(keccak256(addresses[14]))).map(x => buf2hex(x.data));
+    console.log(proofData); // ["0xa34debe9f0dabe4e937ea1d9c9e44a079d4d0c2303f1463d2d42503f441540dd","0x76a9d803f40ded0f0a554f3c186e90761c161df4e21d09597bbaf139789cb988","0x57a386b2067afc735ffd3d7f5c3611be3727c145d7b37302ed7d18f28d17c307"]
+    </script>
+</html>
